@@ -1,8 +1,10 @@
+package dnd.item;
+
 import java.util.function.Function;
 
 public class PlateArmor extends Armor {
 
-	PlateArmor(){
+	public PlateArmor(){
 		itemName = "Plate Armor";
 	}
 	

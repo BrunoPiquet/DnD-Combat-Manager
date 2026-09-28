@@ -1,3 +1,6 @@
+package dnd.item;
+import dnd.Character;
+
 import java.awt.GridLayout;
 
 import javax.swing.*;
@@ -9,9 +12,17 @@ public abstract class Item {
 		return itemName;
 	}
 	
+	public void onEquip(Character c) {
+		
+	}
+	
+	public void onUnEquip(Character c) {
+		
+	}
+	
 	public JPanel getPanel() {
 		JPanel p = new JPanel(new GridLayout(1,2));
-		JButton b = new JButton();
+		//JButton b = new JButton();
 		
 		//b.setActionCommand(itemName);
 		p.add(new JLabel(itemName));

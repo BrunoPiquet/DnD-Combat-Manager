@@ -1,11 +1,21 @@
+package dnd;
+
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
+
+import dnd.core.AbilityScore;
+import dnd.core.Damage;
+import dnd.core.DamageType;
+import dnd.item.Armor;
+import dnd.item.Item;
+import dnd.item.Weapon;
 
 public class Character {
 	private String characterName;
 	
-	private int strenght;
+	private int strength;
 	private int dexterity;
 	private int constitution;
 	private int intelligence;
@@ -13,7 +23,7 @@ public class Character {
 	private int charisma;
 	
 	private int maxHealth = 20;
-	private int currenthealth = maxHealth;
+	private int currentHealth = maxHealth;
 	
 	private int armorClass = 10;
 	
@@ -25,16 +35,22 @@ public class Character {
 	private Armor body;
 	private Function<Integer,Integer> calculateArmorClass;
 	
+	public EnumMap<DamageType, Float> resistances = new EnumMap<>(DamageType.class);
+	
 	private ArrayList<Item> inventory = new ArrayList<Item>();
 
 	public Character(String n, int str, int dex, int con, int wis, int inte, int cha) {
 		this.characterName = n;
-		this.strenght=str;
+		this.strength=str;
 		this.dexterity=dex;
 		this.constitution=con;
 		this.intelligence=inte;
 		this.wisdom=wis;
 		this.charisma=cha;
+		
+		for (DamageType type : DamageType.values()) {
+	        resistances.put(type, (float) 1);
+	    }
 	}
 	
 	public void addToInventory(Item i) {
@@ -48,7 +64,24 @@ public class Character {
 			 return new Damage(1+getModifier(AbilityScore.STR),DamageType.Bludgeoning);
 		}
 		
-		return rightHand.calcDamage(getModifier(AbilityScore.STR));
+		return rightHand.calcDamage(this::getModifier);
+	}
+	
+	public void TakeDamage(Damage d) {
+		for(int i = 0; i < d.ammountArray.size() && i < d.typeArray.size(); i++) {
+			int ins = (int) (d.ammountArray.get(i) * this.resistances.get(d.typeArray.get(i)));			
+			this.currentHealth -= ins;
+		}
+	}
+	
+	public void setResistance(DamageType type, float r) {
+		this.resistances.put(type, r);
+	}
+	
+	private void onEquipRefresh() {
+		if(body!=null) {body.onEquip(this);}
+		if(rightHand!=null) {rightHand.onEquip(this);}
+		if(leftHand!=null) {leftHand.onEquip(this);}
 	}
 	
 	public void equipFromInventory(int index, int hand) {
@@ -65,20 +98,26 @@ public class Character {
 			unEquipRightHand();
 			equipRightHand(inventory.get(index));
 		}
+		
 		inventory.remove(index);
 	}
 	
 	public void equipRightHand(Item item) {
 		rightHand = (Weapon) item;
 	}
+	
 	public void unEquipRightHand() {
 		if(rightHand==null) return;
+		rightHand.onUnEquip(this);
 		inventory.add(rightHand);
 		rightHand = null;
+		onEquipRefresh();
 	}
+	
 	public Weapon getRightHand() {
 		return rightHand;
 	}
+	
 	public String getRightHandName() {
 		if(rightHand==null) return "";
 		return rightHand.toString();
@@ -90,8 +129,10 @@ public class Character {
 	
 	public void unEquipLeftHand() {
 		if(leftHand==null) return;
+		leftHand.onUnEquip(this);
 		inventory.add(leftHand);
 		leftHand = null;
+		onEquipRefresh();
 	}
 	public Weapon getLeftHand() {
 		return leftHand;
@@ -107,13 +148,17 @@ public class Character {
 	}
 	public void unEquipBody() {
 		if(body==null) return;
+		body.onUnEquip(this);
 		inventory.add(body);
 		body=null;
 		calculateArmorClass = null;
+		onEquipRefresh();
 	}
+	
 	public Armor getBody() {
 		return body;
 	}
+	
 	public String getBodyName() {
 		if(body==null) return "";
 		return body.toString();
@@ -132,7 +177,7 @@ public class Character {
 		int score = 0;
 		switch(as) {
 		case STR:{
-			score = this.strenght;
+			score = this.strength;
 			break;
 		}
 		case DEX:{
@@ -165,11 +210,11 @@ public class Character {
 	public void setName(String name) {
 		this.characterName = name;
 	}
-	public int getStrenght() {
-		return strenght;
+	public int getStrength() {
+		return strength;
 	}
-	public void setStrenght(int strenght) {
-		this.strenght = strenght;
+	public void setStrength(int strength) {
+		this.strength = strength;
 	}
 	public int getDexterity() {
 		return dexterity;
@@ -208,10 +253,10 @@ public class Character {
 		this.maxHealth = maxHealth;
 	}
 	public int getCurrentHealth() {
-		return currenthealth;
+		return currentHealth;
 	}
 	public void setCurrentHealth(int currenthealth) {
-		this.currenthealth = currenthealth;
+		this.currentHealth = currenthealth;
 	}
 	public int getSpeed() {
 		return speed;

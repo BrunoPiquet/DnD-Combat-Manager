@@ -1,3 +1,5 @@
+package dnd.item;
+
 import java.awt.GridLayout;
 import java.util.function.Function;
 

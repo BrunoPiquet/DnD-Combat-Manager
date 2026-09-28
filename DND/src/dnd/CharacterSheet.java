@@ -1,3 +1,4 @@
+package dnd;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -13,6 +14,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import dnd.item.Armor;
 
 
 public class CharacterSheet extends JFrame {
@@ -38,7 +41,7 @@ public class CharacterSheet extends JFrame {
 	JPanel rightPanel = new JPanel(new GridLayout(3,1));
 	
 	JPanel statsPanel = new JPanel(new GridLayout(4,2,20,0));
-	JPanel equipmentPanel = new JPanel(new GridLayout(3,3,20,0));
+	JPanel equipmentPanel = new JPanel(new GridLayout(3,3,20,10));
 	JPanel inventoryPanel = new JPanel();
 	
 	JButton unequipRightHandButton = new JButton("Unequip");
@@ -60,9 +63,31 @@ public class CharacterSheet extends JFrame {
 		this.setSize(700, 800);
 		this.setLocationRelativeTo(null);
 		this.setLayout(new GridBagLayout());
-		inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
 		
-		strField.setText(character.getStrenght()+"");
+		
+		JMenuBar menuBar = new JMenuBar();
+		
+        JMenu inventoryMenu = new JMenu("Inventory");
+        
+        JMenu addMenu = new JMenu("Add");
+                
+        addMenu.add(new JMenuItem("Swords"));
+        addMenu.add(new JMenuItem("Bows"));
+        addMenu.add(new JMenuItem("Armors"));
+        
+        
+        JMenuItem clearMenu = new JMenuItem("Clear");
+        clearMenu.addActionListener(e -> {character.getInventory().clear();loadInventoryPanel();this.repaint();});
+        
+
+        
+        inventoryMenu.add(addMenu);
+        inventoryMenu.add(clearMenu);
+
+		menuBar.add(inventoryMenu);
+		setJMenuBar(menuBar);
+		
+		strField.setText(character.getStrength()+"");
 		strField.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		dexField.setText(character.getDexterity()+"");
@@ -89,7 +114,6 @@ public class CharacterSheet extends JFrame {
 		speedField.setText(character.getSpeed()+"");
 		speedField.setHorizontalAlignment(SwingConstants.CENTER);
 		
-
 		
 		
 		leftPanel.add(new JLabel("STR",JLabel.CENTER));
@@ -137,6 +161,7 @@ public class CharacterSheet extends JFrame {
 		//statsPanel.add(new JLabel("Body"));
 		//statsPanel.add(bodyField);
 			
+		inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -188,7 +213,8 @@ public class CharacterSheet extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
 		this.add(new JPanel(),gbc);
 		
-		
+		maxHealthField.addActionListener(listener);
+		currentHealthField.addActionListener(listener);
 		
 		strField.addActionListener(listener);
 		dexField.addActionListener(listener);
@@ -236,9 +262,6 @@ public class CharacterSheet extends JFrame {
 				leftButton.addActionListener(listener);
 				rightButton.addActionListener(listener);
 
-				
-				
-				
 				//leftButton.setActionCommand(i);
 				//rightButton.setActionCommand(i);
 				
@@ -290,7 +313,7 @@ public class CharacterSheet extends JFrame {
 		public void actionPerformed(ActionEvent ev) {
 			if(ev.getSource().equals(strField)) {
 				try {
-					character.setStrenght(Integer.parseInt(strField.getText()));
+					character.setStrength(Integer.parseInt(strField.getText()));
 				}
 				catch(NumberFormatException ex) {
 					System.out.println("Invalid Ability Score");
@@ -341,6 +364,22 @@ public class CharacterSheet extends JFrame {
 					System.out.println("Invalid Ability Score");
 				}
 			}
+			else if(ev.getSource().equals(maxHealthField)) {
+				try {
+					character.setMaxHealth(Integer.parseInt(maxHealthField.getText()));
+				}
+				catch(NumberFormatException ex) {
+					System.out.println("Invalid Max Health");
+				}
+			}
+			else if(ev.getSource().equals(currentHealthField)) {
+				try {
+					character.setCurrentHealth(Integer.parseInt(currentHealthField.getText()));
+				}
+				catch(NumberFormatException ex) {
+					System.out.println("Invalid Current Health");
+				}
+			}
 			else if(ev.getSource().equals(unequipLeftHandButton)) {
 				character.unEquipLeftHand();
 				loadInventoryPanel();
@@ -361,7 +400,7 @@ public class CharacterSheet extends JFrame {
 				
 				String command = ev.getActionCommand();
 				int hand = 0;
-				System.out.println(command.substring(1, command.length()));
+				//System.out.println(command.substring(1, command.length()));
 				int index = Integer.parseInt(command.substring(2, command.length()));
 				if(command.charAt(0) == 'l') {hand = 1;}
 				else if(command.charAt(0) == 'r') {hand = 2;}
@@ -371,7 +410,7 @@ public class CharacterSheet extends JFrame {
 				loadEquipmentPanel();
 				revalidate();
 			}
-			
+			character.refresh();
 		}
 
 	}// End Listener

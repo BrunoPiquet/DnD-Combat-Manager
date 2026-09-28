@@ -1,3 +1,5 @@
+package dnd.core;
+
 
 public enum AbilityScore {
 	STR,

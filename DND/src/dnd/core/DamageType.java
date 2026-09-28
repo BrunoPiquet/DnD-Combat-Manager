@@ -1,3 +1,4 @@
+package dnd.core;
 
 public enum DamageType {
 	Slashing,

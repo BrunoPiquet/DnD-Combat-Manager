@@ -1,3 +1,5 @@
+package dnd.item;
+
 import java.util.function.Function;
 public class HideArmor extends Armor {
 	HideArmor(){

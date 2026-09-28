@@ -1,3 +1,4 @@
+package dnd.core;
 
 public interface Dice {
 	public static int roll(int nDices, int nFaces) {
