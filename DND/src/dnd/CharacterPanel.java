@@ -1,4 +1,5 @@
 package dnd;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 public class CharacterPanel extends Character {
 	
@@ -15,6 +17,19 @@ public class CharacterPanel extends Character {
 	private JPanel panel;
 	private JLabel nameLabel;
 	private JLabel healthLabel;
+	
+	
+	private static MouseAdapter adapter = new MouseAdapter() {
+	    @Override
+	    public void mouseEntered(MouseEvent e) {
+	    	JPanel p = (JPanel) e.getSource();
+	    	p.setBackground(Color.LIGHT_GRAY);
+	    }
+	    public void mouseExited(MouseEvent e) {
+	    	JPanel p = (JPanel) e.getSource();
+	    	p.setBackground(UIManager.getColor("Panel.background"));
+	    }
+	};
 	
 	public CharacterPanel(String n, int str, int dex, int con, int wis, int inte, int cha) {
 		super(n, str, dex, con, wis, inte, cha);
@@ -42,6 +57,8 @@ public class CharacterPanel extends Character {
 	
 	public JPanel makePanel() {
 		panel = new JPanel(new GridLayout(1,3));
+		
+		panel.addMouseListener(adapter);
 		
 		nameLabel = new JLabel(getName());
 		panel.add(nameLabel);
