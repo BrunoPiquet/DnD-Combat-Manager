@@ -54,8 +54,8 @@ public class CombatSimulator {
 	}
 
 	public void Attack() {
-		Damage d = actor.Attack();
-		target.TakeDamage(d);
+		Damage d = actor.weaponAttack();
+		target.takeDamage(d);
 		
 		addToLog(actor.getName() + " attacks "+ target.getName() + " for " + d.toString() +"\n");
 		

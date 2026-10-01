@@ -2,18 +2,22 @@ package dnd;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.function.Function;
 
 import dnd.core.AbilityScore;
 import dnd.core.Damage;
 import dnd.core.DamageType;
+import dnd.core.Dice;
+import dnd.core.Caster;
 import dnd.item.Armor;
 import dnd.item.Item;
 import dnd.item.Weapon;
+import dnd.spell.*;
 
-public class Character {
+public class Character implements Caster {
 	private String characterName;
+	
+	private int level;
 	
 	private int strength;
 	private int dexterity;
@@ -36,11 +40,14 @@ public class Character {
 	private Function<Integer,Integer> calculateArmorClass;
 	
 	public EnumMap<DamageType, Float> resistances = new EnumMap<>(DamageType.class);
+	public EnumMap<AbilityScore, Boolean> savingThrowProficiencies = new EnumMap<>(AbilityScore.class);
 	
 	private ArrayList<Item> inventory = new ArrayList<Item>();
+	private ArrayList<Spell> spellList = new ArrayList<Spell>();
 
-	public Character(String n, int str, int dex, int con, int wis, int inte, int cha) {
+	public Character(String n, int level, int str, int dex, int con, int wis, int inte, int cha) {
 		this.characterName = n;
+		this.level = level;
 		this.strength=str;
 		this.dexterity=dex;
 		this.constitution=con;
@@ -51,6 +58,9 @@ public class Character {
 		for (DamageType type : DamageType.values()) {
 	        resistances.put(type, (float) 1);
 	    }
+		for (AbilityScore type : AbilityScore.values()) {
+			savingThrowProficiencies.put(type, false);
+	    }
 	}
 	
 	public void addToInventory(Item i) {
@@ -58,7 +68,7 @@ public class Character {
 	}
 		
 	
-	public Damage Attack() {
+	public Damage weaponAttack() {
 		
 		if(rightHand == null) {
 			 return new Damage(1+getModifier(AbilityScore.STR),DamageType.Bludgeoning);
@@ -67,7 +77,16 @@ public class Character {
 		return rightHand.calcDamage(this::getModifier);
 	}
 	
-	public void TakeDamage(Damage d) {
+	public Spell castSpell() {
+		//Spell bolt = new Fireball(3, getProficiency(), getModifier(AbilityScore.CHA), AbilityScore.DEX);
+		return null;
+	}
+	
+	public int savingThrow(AbilityScore skill) {
+		return Dice.roll(1, 20) + getModifier(skill) + ((savingThrowProficiencies.get(skill)) ? getProficiency() : 0);
+	}
+	
+	public void takeDamage(Damage d) {
 		for(int i = 0; i < d.ammountArray.size() && i < d.typeArray.size(); i++) {
 			int ins = (int) (d.ammountArray.get(i) * this.resistances.get(d.typeArray.get(i)));			
 			this.currentHealth -= ins;
@@ -168,6 +187,10 @@ public class Character {
 		return inventory;
 	}
 	
+	public ArrayList<Spell> getSpellList(){
+		return spellList;
+	}
+	
 	public int getArmorClass() {
 		if(calculateArmorClass == null) {return armorClass;}
 		return calculateArmorClass.apply(this.getDexterity());
@@ -203,6 +226,12 @@ public class Character {
 		return (score - 10)/2;
 	}
 	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	public int getLevel() {
+		return level;
+	}
 	
 	public String getName() {
 		return characterName;
@@ -263,6 +292,10 @@ public class Character {
 	}
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+	
+	public int getProficiency() {
+		return 2 + ((level - 1) / 4);
 	}
 
 

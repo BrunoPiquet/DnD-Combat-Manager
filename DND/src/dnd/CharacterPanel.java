@@ -31,8 +31,8 @@ public class CharacterPanel extends Character {
 	    }
 	};
 	
-	public CharacterPanel(String n, int str, int dex, int con, int wis, int inte, int cha) {
-		super(n, str, dex, con, wis, inte, cha);
+	public CharacterPanel(String n, int level, int str, int dex, int con, int wis, int inte, int cha) {
+		super(n, level, str, dex, con, wis, inte, cha);
 
 	}
 	

@@ -4,21 +4,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import dnd.item.EverburnBlade;
-import dnd.item.PlateArmor;
-
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.*;
 
-import dnd.core.Damage;
-import dnd.core.DamageType;
 import dnd.item.*;
+import dnd.spell.*;
+import dnd.core.*;
 
 public class DnD_Combat_Manager extends JFrame {
 		
@@ -135,9 +127,9 @@ public class DnD_Combat_Manager extends JFrame {
 
 	public static void main(String[] args) {
 
-		characterList.add(new CharacterPanel("Kulve",20,14,19,10,10,13));
+		characterList.add(new CharacterPanel("Kulve", 5, 20,14,19,10,10,13));
 		
-		characterList.add(new CharacterPanel("Rath",20,14,19,10,10,13));
+		characterList.add(new CharacterPanel("Rath", 5, 20,14,19,10,10,13));
 		
 		//characterList.get(0).addToInventory(new Greatsword());
 		//characterList.get(0).addToInventory(new HideArmor());
@@ -150,9 +142,13 @@ public class DnD_Combat_Manager extends JFrame {
 		 CharacterPanel kulve = characterList.get(0);
 		 CharacterPanel rath = characterList.get(1);
 		 
+		 
 		 rath.equipBody(new ArmorOfFireResistance());
 		 rath.equipRightHand(new DarkfireShortbow());
 		 rath.unEquipRightHand();
+		 
+		 kulve.getSpellList().add(new Fireball());
+		 kulve.getSpellList().add(new FireBolt());
 		 
 		 //simulator.setActor(kulve);
 		 //simulator.setTarget(rath);
