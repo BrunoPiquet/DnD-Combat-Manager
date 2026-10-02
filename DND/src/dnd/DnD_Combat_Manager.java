@@ -21,13 +21,8 @@ public class DnD_Combat_Manager extends JFrame {
 	//static JList<Character> list = new JList<Character>(characterList);
 	
 	static JPanel listPanel = new JPanel();
-	static JTextArea logArea = new JTextArea();
-	static JPanel simulatorPanel = new JPanel();
-	static JLabel actorLabel = new JLabel("", SwingConstants.CENTER);
-	static JLabel targetLabel = new JLabel("", SwingConstants.CENTER);
-	static JButton actButton = new JButton("Act");
-	static JButton clearButton = new JButton("Clear");
-	static CombatSimulator simulator = new CombatSimulator(logArea, simulatorPanel);
+
+	static CombatSimulator simulator = new CombatSimulator();
 	
 	DnD_Combat_Manager(){
 		super("DND Combat Manager");
@@ -39,42 +34,9 @@ public class DnD_Combat_Manager extends JFrame {
 		listPanel.setLayout(new GridLayout(15,1));
 		
 		this.add(new JScrollPane(listPanel));
-		JPanel rightPanel = new JPanel(new GridLayout(2,1));
-		
-		logArea.setEditable(false);
-		
-		this.add(rightPanel);
-		rightPanel.add(simulatorPanel);
-		rightPanel.add(logArea);
-		logArea.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-		
 		buildListPanel();
-		
-		simulatorPanel.setLayout(new GridLayout(5,1));
-		JLabel labelActor = new JLabel("Actor", SwingConstants.CENTER);
-		labelActor.setVerticalAlignment(SwingConstants.BOTTOM);
-		simulatorPanel.add(labelActor);
-		simulatorPanel.add(actorLabel);
-		//simulatorPanel.add(new JLabel());
-		JLabel labelTarget = new JLabel("Actor", SwingConstants.CENTER);
-		labelTarget.setVerticalAlignment(SwingConstants.BOTTOM);
-		simulatorPanel.add(labelTarget);
-		
-		simulatorPanel.add(targetLabel);
-		
-		actorLabel.setFont(new Font("Arial", Font.BOLD, 25));
-		targetLabel.setFont(new Font("Arial", Font.BOLD, 25));
-		
-		JPanel buttonsPanel = new JPanel(new GridLayout(1,3));
-		buttonsPanel.add(actButton);
-		buttonsPanel.add(new JLabel());
-		buttonsPanel.add(clearButton);
-		
-		actButton.addActionListener(listener);
-		clearButton.addActionListener(listener);
-		
-		simulatorPanel.add(buttonsPanel);
 
+		this.add(simulator.getPanel());
 		
 		//Listener listener = new Listener();
 		//list.addListSelectionListener(listener);
@@ -90,29 +52,15 @@ public class DnD_Combat_Manager extends JFrame {
 	    		if(e.getSource() == characterList.get(i).getPanel()) {
 	    			if(e.getButton() == MouseEvent.BUTTON1) {
 	    				simulator.setActor(characterList.get(i));
-	    				actorLabel.setText(characterList.get(i).getName());
+	    				//actorLabel.setText(characterList.get(i).getName());
 	    			}
 	    			else if(e.getButton() == MouseEvent.BUTTON3) {
 	    				simulator.setTarget(characterList.get(i));
-	    				targetLabel.setText(characterList.get(i).getName());
+	    				//targetLabel.setText(characterList.get(i).getName());
 	    			}
 	    		}
 	    	}
 	    }
-	};
-	private ActionListener listener = new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == actButton) {
-				simulator.Attack();
-			}
-			else if(e.getSource() == clearButton) {
-				simulator.clear();
-				actorLabel.setText("");
-				targetLabel.setText("");
-			}
-			
-		}
 	};
 	    
 	public void buildListPanel() {
@@ -147,8 +95,10 @@ public class DnD_Combat_Manager extends JFrame {
 		 rath.equipRightHand(new DarkfireShortbow());
 		 rath.unEquipRightHand();
 		 
-		 kulve.getSpellList().add(new Fireball());
-		 kulve.getSpellList().add(new FireBolt());
+		 kulve.getSpellList().add(new Fireball(AbilityScore.DEX));
+		 kulve.getSpellList().add(new FireBolt(null));
+		 
+		 //rath.takeDamage(kulve.castSpell(0).Save(kulve, rath, 3));
 		 
 		 //simulator.setActor(kulve);
 		 //simulator.setTarget(rath);

@@ -6,12 +6,18 @@ public abstract class Spell {
 	
 	public String spellName;
 	
-	public Spell() {}
+	public AbilityScore casterType;
 	
-	public Damage Save(Character target, int level, int spellSave) {return null;};
+	public Spell(AbilityScore as) {
+		this.casterType = as;
+		}
+	
+	public Damage Save(Character caster, Character target, int level) {return null;};
 	
 	public Damage Cast(Character caster) {return null;};
 	
-	
+	public String toString() {
+		return spellName;
+	}
 	
 }

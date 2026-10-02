@@ -44,7 +44,7 @@ public class Character implements Caster {
 	
 	private ArrayList<Item> inventory = new ArrayList<Item>();
 	private ArrayList<Spell> spellList = new ArrayList<Spell>();
-
+	
 	public Character(String n, int level, int str, int dex, int con, int wis, int inte, int cha) {
 		this.characterName = n;
 		this.level = level;
@@ -77,9 +77,20 @@ public class Character implements Caster {
 		return rightHand.calcDamage(this::getModifier);
 	}
 	
-	public Spell castSpell() {
+	public ArrayList<String> getActions(){
+		ArrayList<String> actions = new ArrayList<String>();
+		actions.add("Attack");
+		
+		for(int i=0; i<spellList.size();i++) {
+			actions.add(spellList.get(i).toString());
+		}
+		
+		return actions;
+	}
+	
+	public Spell castSpell(int index) {
 		//Spell bolt = new Fireball(3, getProficiency(), getModifier(AbilityScore.CHA), AbilityScore.DEX);
-		return null;
+		return spellList.get(index);
 	}
 	
 	public int savingThrow(AbilityScore skill) {
@@ -226,6 +237,10 @@ public class Character implements Caster {
 		return (score - 10)/2;
 	}
 	
+	public int getSpellSave(AbilityScore as) {
+		return 8 + getProficiency() + getModifier(as);
+	}
+	
 	public void setLevel(int level) {
 		this.level = level;
 	}
@@ -293,6 +308,12 @@ public class Character implements Caster {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+	
+	/*
+	public void setSpellcastingAbility(AbilityScore as) {
+		spellCastingAbility = as;
+	}
+	*/
 	
 	public int getProficiency() {
 		return 2 + ((level - 1) / 4);

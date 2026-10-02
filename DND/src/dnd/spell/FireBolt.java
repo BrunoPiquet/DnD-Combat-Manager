@@ -8,8 +8,9 @@ import dnd.Character;
 
 public class FireBolt extends Spell{
 
-	public FireBolt() {
-		super();
+	public FireBolt(AbilityScore casterType) {
+		super(casterType);
+		spellName = "Fire Bolt";
 	}
 
 	public Damage Cast(Character c) {
