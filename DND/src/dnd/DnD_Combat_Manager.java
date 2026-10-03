@@ -104,7 +104,6 @@ public class DnD_Combat_Manager extends JFrame {
 		 //simulator.setTarget(rath);
 		 //simulator.Attack();
 		 //simulator.Attack();
-		  
 	}
 
 }

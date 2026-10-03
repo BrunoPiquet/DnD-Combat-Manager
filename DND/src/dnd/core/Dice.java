@@ -1,6 +1,23 @@
 package dnd.core;
 
-public interface Dice {
+public class Dice {
+	
+	public int nFaces;
+	public int nDices;
+	
+	public Dice(int nDices, int nFaces) {
+		this.nDices = nDices;
+		this.nFaces = nFaces;
+	}
+	
+	public int roll() {
+		int total=0;
+		for(int i=0; i< this.nDices;i++) {
+			total+=(int)(Math.random()*this.nFaces+1);
+		}
+		return total; 
+	}
+	
 	public static int roll(int nDices, int nFaces) {
 		int total=0;
 		for(int i=0; i< nDices;i++) {

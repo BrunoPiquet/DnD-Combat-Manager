@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-
+import dnd.core.WeaponCreator;
 import dnd.item.Armor;
 
 
@@ -71,11 +71,13 @@ public class CharacterSheet extends JFrame {
         addMenu.add(new JMenuItem("Bows"));
         addMenu.add(new JMenuItem("Armors"));
         
-        
         JMenuItem clearMenu = new JMenuItem("Clear");
         clearMenu.addActionListener(e -> {character.getInventory().clear();loadInventoryPanel();this.repaint();});
         
-
+        JMenuItem customWeaponMenu = new JMenuItem("Custom Weapon");
+        customWeaponMenu.addActionListener(e -> {new WeaponCreator(this);});
+        
+        addMenu.add(customWeaponMenu);
         
         inventoryMenu.add(addMenu);
         inventoryMenu.add(clearMenu);
@@ -229,7 +231,7 @@ public class CharacterSheet extends JFrame {
 		this.setVisible(true);
 	}
 	
-	private void loadInventoryPanel() {
+	public void loadInventoryPanel() {
 		inventoryPanel.removeAll();
 		
 		if(character.getInventory().size()==0) {inventoryPanel.add(new JPanel());return;}

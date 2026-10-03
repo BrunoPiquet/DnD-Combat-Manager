@@ -2,6 +2,7 @@ package dnd.item;
 import dnd.core.AbilityScore;
 
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.function.Function;
 
 import javax.swing.JButton;
@@ -9,10 +10,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dnd.core.Damage;
+import dnd.core.DamageType;
+import dnd.core.Dice;
 
 public abstract class Weapon extends Item {
 
 	public abstract Damage calcDamage(Function<AbilityScore, Integer> mod);
+	public ArrayList<Dice> weaponDamageDice = new ArrayList<Dice>();
+	public ArrayList<DamageType> weaponDamageTypes = new ArrayList<DamageType>();
+	public int enhancement;
+	public AbilityScore abilityModifier;
 	
 	public JPanel getPanel() {
 		JPanel p = new JPanel(new GridLayout(1,3));
