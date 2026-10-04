@@ -33,13 +33,26 @@ public class DnD_Combat_Manager extends JFrame {
 		this.setLayout(new GridLayout(1,2));
 		listPanel.setLayout(new GridLayout(15,1));
 		
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenu addMenu = new JMenu("Add");
+		
+		menuBar.add(addMenu);
+		
+		JMenuItem addItem = new JMenuItem("New Character");
+		addMenu.add(addItem);
+		
+		addItem.addActionListener(e -> {characterList.add(new CharacterPanel()); buildListPanel();});
+		
 		this.add(new JScrollPane(listPanel));
 		buildListPanel();
 
-		this.add(simulator.getPanel());
+		this.add(new JScrollPane(simulator.getPanel()));
 		
 		//Listener listener = new Listener();
 		//list.addListSelectionListener(listener);
+		
+		setJMenuBar(menuBar);
 		
 		this.setVisible(true);
 		
@@ -64,6 +77,7 @@ public class DnD_Combat_Manager extends JFrame {
 	};
 	    
 	public void buildListPanel() {
+		listPanel.removeAll();
 		for(int i=0; i<characterList.size();i++) {
 			JPanel p = characterList.get(i).makePanel();
 						
@@ -71,6 +85,8 @@ public class DnD_Combat_Manager extends JFrame {
 			
 			listPanel.add(p);
 		}
+		revalidate();
+		repaint();
 	}
 
 	public static void main(String[] args) {
@@ -95,8 +111,8 @@ public class DnD_Combat_Manager extends JFrame {
 		 rath.equipRightHand(new DarkfireShortbow());
 		 rath.unEquipRightHand();
 		 
-		 kulve.getSpellList().add(new Fireball(AbilityScore.DEX));
-		 kulve.getSpellList().add(new FireBolt(null));
+		 kulve.getSpellList().add(new Fireball(AbilityScore.CHA));
+		 kulve.getSpellList().add(new FireBolt(AbilityScore.CHA));
 		 
 		 //rath.takeDamage(kulve.castSpell(0).Save(kulve, rath, 3));
 		 

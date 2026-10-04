@@ -10,6 +10,7 @@ import dnd.core.Dice;
 public class Longbow extends Weapon {
 	public Longbow(){
 		itemName = "Longbow";
+		this.abilityModifier = AbilityScore.DEX;
 	}
 
 	public Damage calcDamage(Function<AbilityScore, Integer> mod) {

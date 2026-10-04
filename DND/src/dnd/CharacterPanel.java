@@ -1,5 +1,6 @@
 package dnd;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,10 @@ public class CharacterPanel extends Character {
 
 	}
 	
+	public CharacterPanel() {
+		super("Name", 0, 10, 10, 10, 10, 10, 10);
+	}
+	
 	public void ShowUI() {
 		if(!isUiOpen) {
 			isUiOpen=true;
@@ -46,6 +51,7 @@ public class CharacterPanel extends Character {
 	
 	public void refresh() {
 		healthLabel.setText(getCurrentHealth()+"/"+getMaxHealth());
+		nameLabel.setText(getName());
 		
 		panel.revalidate();
 		panel.repaint();

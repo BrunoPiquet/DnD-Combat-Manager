@@ -15,11 +15,12 @@ import dnd.core.Dice;
 
 public abstract class Weapon extends Item {
 
-	public abstract Damage calcDamage(Function<AbilityScore, Integer> mod);
 	public ArrayList<Dice> weaponDamageDice = new ArrayList<Dice>();
 	public ArrayList<DamageType> weaponDamageTypes = new ArrayList<DamageType>();
 	public int enhancement;
 	public AbilityScore abilityModifier;
+	
+	public abstract Damage calcDamage(Function<AbilityScore, Integer> mod);
 	
 	public JPanel getPanel() {
 		JPanel p = new JPanel(new GridLayout(1,3));

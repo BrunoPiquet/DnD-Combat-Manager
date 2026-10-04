@@ -1,5 +1,6 @@
 package dnd;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,7 +18,10 @@ import dnd.item.Armor;
 public class CharacterSheet extends JFrame {
 	public CharacterPanel character;
 		
-	JTextField strField = new JTextField() ;
+	JTextField nameField = new JTextField();
+	JTextField ownerField = new JTextField();
+	
+	JTextField strField = new JTextField();
 	JTextField dexField = new JTextField();
 	JTextField conField = new JTextField();
 	JTextField intField = new JTextField();
@@ -47,7 +51,7 @@ public class CharacterSheet extends JFrame {
 	Listener listener = new Listener();
 	
 	CharacterSheet(CharacterPanel cha){
-		super(cha.getName()+ " Character's Sheet");
+		super(cha.getName()+ "'s Character Sheet");
 		//this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {    
 			public void windowClosing(WindowEvent e) {
@@ -58,8 +62,20 @@ public class CharacterSheet extends JFrame {
 		
 		this.setSize(700, 800);
 		this.setLocationRelativeTo(null);
-		this.setLayout(new GridBagLayout());
 		
+		JPanel topPanel = new JPanel(new GridLayout(1,5));
+		
+		topPanel.add(new JLabel("Name", JLabel.RIGHT));
+		topPanel.add(nameField);
+		topPanel.add(new JLabel("Owner", JLabel.RIGHT));
+		topPanel.add(ownerField);
+		topPanel.add(new JLabel());
+		
+		this.add(topPanel,BorderLayout.NORTH);
+		
+		
+		JPanel mainPanel = new JPanel(new GridBagLayout());
+		this.add(mainPanel, BorderLayout.CENTER);
 		
 		JMenuBar menuBar = new JMenuBar();
 		
@@ -112,7 +128,8 @@ public class CharacterSheet extends JFrame {
 		speedField.setText(character.getSpeed()+"");
 		speedField.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		
+		nameField.setText(character.getName());
+		ownerField.setText(character.getOwnerName());
 		
 		leftPanel.add(new JLabel("STR",JLabel.CENTER));
 		leftPanel.add(strField);
@@ -154,6 +171,7 @@ public class CharacterSheet extends JFrame {
 		statsPanel.add(acField);
 		statsPanel.add(speedField);
 		
+		
 		loadEquipmentPanel();
 		
 		//statsPanel.add(new JLabel("Body"));
@@ -181,35 +199,35 @@ public class CharacterSheet extends JFrame {
         gbc.weightx = 0.01;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-		this.add(new JPanel(),gbc);
+        mainPanel.add(new JPanel(),gbc);
 		
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 0.33;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-		this.add(leftPanel,gbc);
+        mainPanel.add(leftPanel,gbc);
 		
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.weightx = 0.01;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-		this.add(new JPanel(),gbc);
+        mainPanel.add(new JPanel(),gbc);
 		
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-		this.add(rightPanel,gbc);
+        mainPanel.add(rightPanel,gbc);
 		
         gbc.gridx = 4;
         gbc.gridy = 0;
         gbc.weightx = 0.01;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
-		this.add(new JPanel(),gbc);
+        mainPanel.add(new JPanel(),gbc);
 		
 		maxHealthField.addActionListener(listener);
 		currentHealthField.addActionListener(listener);
@@ -220,6 +238,9 @@ public class CharacterSheet extends JFrame {
 		intField.addActionListener(listener);
 		wisField.addActionListener(listener);
 		chaField.addActionListener(listener);
+		
+		nameField.addActionListener(listener);
+		ownerField.addActionListener(listener);
 		
 		unequipLeftHandButton.addActionListener(listener);
 		unequipRightHandButton.addActionListener(listener);
@@ -393,6 +414,12 @@ public class CharacterSheet extends JFrame {
 				loadInventoryPanel();
 				loadEquipmentPanel();
 
+			}
+			else if(ev.getSource().equals(nameField)) {
+				character.setName(nameField.getText());
+			}
+			else if(ev.getSource().equals(ownerField)) {
+				character.setOwnerName(ownerField.getText());
 			}
 			else {
 				

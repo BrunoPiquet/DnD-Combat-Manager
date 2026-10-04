@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -70,8 +71,12 @@ public class CombatSimulator {
 		actButton.addActionListener(listener);
 		clearButton.addActionListener(listener);
 		
+		JScrollPane scrollPanel = new JScrollPane(logArea);
+		scrollPanel.setPreferredSize(new java.awt.Dimension(10, 10));
+		logArea.setLineWrap(true);
+		logArea.setWrapStyleWord(true);
 		
-		simulatorPanel.add(logArea);
+		simulatorPanel.add(scrollPanel);
 		
 		
 	}
@@ -139,10 +144,21 @@ public class CombatSimulator {
 	}
 
 	public void Act() {
+		addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ target.getName() + "\n");
+		
 		if(actionsBox.getSelectedItem()== "Attack") {
-			Damage d = actor.weaponAttack();
-			target.takeDamage(d);
-			addToLog(actor.getName() + " attacks "+ target.getName() + " for " + d.toString() +"\n");
+			int attackRoll = actor.weaponAttackRoll();
+			
+			if(attackRoll > target.getArmorClass()) {
+				Damage d = actor.weaponAttack();
+				target.takeDamage(d);
+				addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ actor.getRightHandName()+"" +"\n");
+			}
+			else {
+				addToLog(actor.getName() + " missed "+ target.getName() + " (" + attackRoll +" < "+ target.getArmorClass() +")\n");
+			}
+			
+
 		}
 		else {
 			Spell selectedSpell = null;
@@ -153,21 +169,27 @@ public class CombatSimulator {
 				}
 			}
 			
-			if(selectedSpell.casterType != null) {
+			if(selectedSpell.isSave) {
 				Damage d = selectedSpell.Save(actor, target, 3);
 				target.takeDamage(d);
 			}
 			else {
-				Damage d = selectedSpell.Cast(actor);
-				target.takeDamage(d);
+				int attackRoll = actor.spellAttackRoll(selectedSpell.casterType);
+				
+				if(attackRoll > target.getArmorClass()) {
+					Damage d = selectedSpell.Cast(actor);
+					target.takeDamage(d);
+					addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
+				}
+				else {
+					addToLog(actor.getName() + " missed "+ target.getName() + " (" + attackRoll +" < "+ target.getArmorClass() +")\n");
+				}
+
 			}
 			
-
+			
 		}
-
-		
-		
-		
+		addToLog("\n");
 		actor.refresh();
 		target.refresh();
 	}

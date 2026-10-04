@@ -16,6 +16,7 @@ import dnd.spell.*;
 
 public class Character implements Caster {
 	private String characterName;
+	private String ownerName = "";
 	
 	private int level;
 	
@@ -75,6 +76,13 @@ public class Character implements Caster {
 		}
 		
 		return rightHand.calcDamage(this::getModifier);
+	}
+	
+	public int weaponAttackRoll() {
+		return Dice.d20() + getModifier(rightHand.abilityModifier) + getProficiency() + rightHand.enhancement;
+	}
+	public int spellAttackRoll(AbilityScore as) {
+		return Dice.d20() + getModifier(as) + getProficiency();
 	}
 	
 	public ArrayList<String> getActions(){
@@ -253,6 +261,12 @@ public class Character implements Caster {
 	}
 	public void setName(String name) {
 		this.characterName = name;
+	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+	public void setOwnerName(String name) {
+		this.ownerName = name;
 	}
 	public int getStrength() {
 		return strength;

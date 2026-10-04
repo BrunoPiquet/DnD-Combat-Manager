@@ -8,6 +8,8 @@ public abstract class Spell {
 	
 	public AbilityScore casterType;
 	
+	public boolean isSave;
+	
 	public Spell(AbilityScore as) {
 		this.casterType = as;
 		}
