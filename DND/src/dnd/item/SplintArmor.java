@@ -2,9 +2,14 @@ package dnd.item;
 
 import java.util.function.Function;
 
+import dnd.core.AbilityScore;
+
 public class SplintArmor extends Armor{	
-	public Function<Integer,Integer> getArmorCalc(){
-		return (mod) -> {return 17;}; 
+	private static final long serialVersionUID = 1L;
+
+	public int getArmorClass(Function<AbilityScore, Integer> mod) {
+		// TODO Auto-generated method stub
+		return 17;
 	}
 	
 }

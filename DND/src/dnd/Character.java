@@ -1,5 +1,6 @@
 package dnd;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.function.Function;
@@ -14,7 +15,9 @@ import dnd.item.Item;
 import dnd.item.Weapon;
 import dnd.spell.*;
 
-public class Character implements Caster {
+public class Character implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String characterName;
 	private String ownerName = "";
 	
@@ -38,7 +41,7 @@ public class Character implements Caster {
 	private Weapon leftHand;
 	
 	private Armor body;
-	private Function<Integer,Integer> calculateArmorClass;
+	//private Function<Integer,Integer> calculateArmorClass;
 	
 	public EnumMap<DamageType, Float> resistances = new EnumMap<>(DamageType.class);
 	public EnumMap<AbilityScore, Boolean> savingThrowProficiencies = new EnumMap<>(AbilityScore.class);
@@ -79,6 +82,10 @@ public class Character implements Caster {
 	}
 	
 	public int weaponAttackRoll() {
+		if(rightHand == null) {
+			 return Dice.d20() + getModifier(AbilityScore.STR);
+		}
+		
 		return Dice.d20() + getModifier(rightHand.abilityModifier) + getProficiency() + rightHand.enhancement;
 	}
 	public int spellAttackRoll(AbilityScore as) {
@@ -182,14 +189,14 @@ public class Character implements Caster {
 	
 	public void equipBody(Item item) {
 		body = (Armor) item;
-		calculateArmorClass = ((Armor) item).getArmorCalc();
+		//calculateArmorClass = ((Armor) item).getArmorCalc();
 	}
 	public void unEquipBody() {
 		if(body==null) return;
 		body.onUnEquip(this);
 		inventory.add(body);
 		body=null;
-		calculateArmorClass = null;
+		//calculateArmorClass = null;
 		onEquipRefresh();
 	}
 	
@@ -211,8 +218,8 @@ public class Character implements Caster {
 	}
 	
 	public int getArmorClass() {
-		if(calculateArmorClass == null) {return armorClass;}
-		return calculateArmorClass.apply(this.getDexterity());
+		if(body == null) {return armorClass;}
+		return body.getArmorClass(this::getModifier);
 	}
 	
 	public int getModifier(AbilityScore as) {

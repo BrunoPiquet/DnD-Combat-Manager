@@ -1,6 +1,8 @@
 package dnd.core;
 
-public class Dice {
+import java.io.Serializable;
+
+public class Dice implements Serializable{
 	
 	public int nFaces;
 	public int nDices;

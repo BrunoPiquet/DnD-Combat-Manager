@@ -1,5 +1,6 @@
 package dnd.item;
 import dnd.Character;
+import dnd.core.AbilityScore;
 import dnd.core.DamageType;
 
 import java.util.function.Function;
@@ -18,8 +19,8 @@ public class ArmorOfFireResistance extends Armor {
 		c.setResistance(DamageType.Fire, 1f);
 	}
 
-	public Function<Integer, Integer> getArmorCalc() {
-		return (mod) -> {return 18;};
+	public int getArmorClass(Function<AbilityScore, Integer> mod) {
+		return 18;
 	}
 
 }

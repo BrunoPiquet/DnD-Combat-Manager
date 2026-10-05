@@ -1,9 +1,13 @@
 package dnd.spell;
 import dnd.core.*;
+
+import java.io.Serializable;
+
 import dnd.Character;
 
-public abstract class Spell {
-	
+public abstract class Spell implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	public String spellName;
 	
 	public AbilityScore casterType;
