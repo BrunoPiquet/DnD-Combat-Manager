@@ -70,6 +70,12 @@ public class Character implements Serializable {
 	public void addToInventory(Item i) {
 		inventory.add(i);
 	}
+	
+	public void addToSpellList(Spell spell, AbilityScore as) {
+		spell.caster = this;
+		spell.casterType = as;
+		spellList.add(spell);
+	}
 		
 	
 	public Damage weaponAttack() {

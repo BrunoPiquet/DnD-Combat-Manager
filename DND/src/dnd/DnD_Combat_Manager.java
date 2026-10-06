@@ -44,11 +44,8 @@ public class DnD_Combat_Manager extends JFrame {
 		JMenuItem addItem = new JMenuItem("New Character");
 		addMenu.add(addItem);
 		
-		JMenuItem saveItem = new JMenuItem("Save Character");
+		JMenuItem saveItem = new JMenuItem("Saved Characters");
 		charactersMenu.add(saveItem);
-		
-		JMenuItem loadItem = new JMenuItem("Load Character");
-		charactersMenu.add(loadItem);
 		
 		JMenuItem clearItem = new JMenuItem("Clear Characters");
 		charactersMenu.add(clearItem);
@@ -56,7 +53,7 @@ public class DnD_Combat_Manager extends JFrame {
 		addItem.addActionListener(e -> {characterList.add(new CharacterPanel()); buildListPanel();});
 		
 		saveItem.addActionListener(e -> {new CharacterFileSystem();});
-		loadItem.addActionListener(e -> {characterList.add(loadCharacter("file.ser")); buildListPanel();});
+
 		clearItem.addActionListener(e ->{characterList.removeAllElements(); buildListPanel();});
 		
 		this.add(new JScrollPane(listPanel));
@@ -73,7 +70,7 @@ public class DnD_Combat_Manager extends JFrame {
 		
 	}
 	
-	private MouseAdapter adapter = new MouseAdapter() {
+	private static MouseAdapter adapter = new MouseAdapter() {
 	    @Override
 	    public void mousePressed(MouseEvent e) {
 	    	for(int i =0; i<characterList.size();i++) {
@@ -91,27 +88,34 @@ public class DnD_Combat_Manager extends JFrame {
 	    }
 	};
 	    
-	public void buildListPanel() {
+	public static void buildListPanel() {
 		listPanel.removeAll();
 		for(int i=0; i<characterList.size();i++) {
 			JPanel p = characterList.get(i).makePanel();
 						
 			p.addMouseListener(adapter);
+
 			
 			listPanel.add(p);
 		}
-		revalidate();
-		repaint();
+		listPanel.revalidate();
+		listPanel.repaint();
 	}
 	
-	public static void saveCharacter(CharacterPanel c){
-        String filename = "file.ser";
-
+	public static void saveCharacter(String characterName){
+		CharacterPanel character = null;
+		for(var item : characterList) {
+			if(item.getName()==characterName) {
+				character = item;
+			}
+		}
+		
         // Serialization
         try {
-            FileOutputStream file = new FileOutputStream(filename);
+            String filename = character.getName()+".ser";
+            FileOutputStream file = new FileOutputStream("SavedCharacters/"+filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
-            out.writeObject(c);
+            out.writeObject(character);
             out.close();
             file.close();
             System.out.println("Object has been serialized");
@@ -121,7 +125,7 @@ public class DnD_Combat_Manager extends JFrame {
         }
 	}
 	
-	public static CharacterPanel loadCharacter(String filename) {
+	public static void loadCharacter(String filename) {
         // Deserialization
         try {
             FileInputStream file = new FileInputStream(filename);
@@ -130,14 +134,23 @@ public class DnD_Combat_Manager extends JFrame {
             in.close();
             file.close();
             System.out.println("Object has been deserialized");
-            return character;
+            characterList.add(character);
+            buildListPanel();
 
         } catch (IOException ex) {
             System.out.println("IOException is caught");
         } catch (ClassNotFoundException ex) {
             System.out.println("ClassNotFoundException is caught");
         }
-		return null;
+        
+	}
+	
+	public static ArrayList<String> getCharacterNameList(){
+		ArrayList<String> list = new ArrayList<String>();
+		for(var item : characterList) {
+			list.add(item.getName());
+		}
+		return list;
 	}
 
 	public static void main(String[] args) {
@@ -163,8 +176,9 @@ public class DnD_Combat_Manager extends JFrame {
 		 rath.equipRightHand(new DarkfireShortbow());
 		 rath.unEquipRightHand();
 		 
-		 //kulve.getSpellList().add(new Fireball(AbilityScore.CHA));
-		 //kulve.getSpellList().add(new FireBolt(AbilityScore.CHA));
+		 kulve.addToSpellList(new Fireball(), AbilityScore.CHA);
+		 kulve.addToSpellList(new FireBolt(), AbilityScore.CHA);
+		 kulve.addToSpellList(new ConeOfCold(), AbilityScore.CHA);
 		 
 	 
 		 

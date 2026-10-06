@@ -31,6 +31,8 @@ public class CombatSimulator {
 	static JButton actButton = new JButton("Act");
 	static JButton clearButton = new JButton("Clear");
 	static JComboBox<String> actionsBox = new JComboBox<>();
+	static JComboBox<Integer> levelSelectionBox = new JComboBox<>();
+	static JPanel buttonsPanel = new JPanel(new GridLayout(1,3));
 	
 	CombatSimulator(){
 
@@ -61,15 +63,12 @@ public class CombatSimulator {
 		actorLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		targetLabel.setFont(new Font("Arial", Font.BOLD, 25));
 		
-		JPanel buttonsPanel = new JPanel(new GridLayout(1,3));
-		
-		buttonsPanel.add(actButton);
-		buttonsPanel.add(actionsBox);
-		buttonsPanel.add(clearButton);
-		controllerPanel.add(buttonsPanel);
+		buildButtonsPanel(false);
 		
 		actButton.addActionListener(listener);
 		clearButton.addActionListener(listener);
+		actionsBox.addActionListener(listener);
+		levelSelectionBox.addActionListener(listener);
 		
 		JScrollPane scrollPanel = new JScrollPane(logArea);
 		scrollPanel.setPreferredSize(new java.awt.Dimension(10, 10));
@@ -80,6 +79,26 @@ public class CombatSimulator {
 		
 		
 	}
+	private void buildButtonsPanel(boolean withLevelSelection) {
+		buttonsPanel.removeAll();
+		if(withLevelSelection) {
+			buttonsPanel.setLayout(new GridLayout(1,4));
+		}
+		else {
+			buttonsPanel.setLayout(new GridLayout(1,3));
+		}
+		
+		buttonsPanel.add(actButton);
+		buttonsPanel.add(actionsBox);
+		if(withLevelSelection) {
+			buttonsPanel.add(levelSelectionBox);
+		}
+		buttonsPanel.add(clearButton);
+		controllerPanel.add(buttonsPanel);
+		
+		buttonsPanel.revalidate();
+	}
+	
 	private ActionListener listener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -90,6 +109,34 @@ public class CombatSimulator {
 				clear();
 				actorLabel.setText("");
 				targetLabel.setText("");
+			}
+			else if(e.getSource() == actionsBox) {
+				levelSelectionBox.removeAllItems();
+				buildButtonsPanel(false);
+				
+				Spell selectedSpell = null;
+				for(int i=0;i<actor.getSpellList().size();i++) {
+					if(actor.getSpellList().get(i).toString() == actionsBox.getSelectedItem()) {
+						selectedSpell = actor.getSpellList().get(i);
+						buildButtonsPanel(true);
+						break;
+					}
+				}
+				if(selectedSpell != null) {
+					if(selectedSpell.minimumCastLevel==0) {
+						levelSelectionBox.addItem(0);
+					}
+					else {
+						for(int i = selectedSpell.minimumCastLevel; i <= 9; i++) {
+							levelSelectionBox.addItem(i);
+						}
+					}
+
+				}
+			}
+			else if(e.getSource() == levelSelectionBox) {
+
+				
 			}
 			
 		}
@@ -122,10 +169,11 @@ public class CombatSimulator {
 	}
 	
 	public void clear() {
+		actionsBox.removeAllItems();
 		this.actor = null;
 		this.target = null;
 		//this.simulatorPanel.removeAll();
-		actionsBox.removeAllItems();
+
 	}
 
 	public void setActor(CharacterPanel actor) {
@@ -170,14 +218,16 @@ public class CombatSimulator {
 			}
 			
 			if(selectedSpell.isSave) {
-				Damage d = selectedSpell.Save(actor, target, 3);
+				Damage d = selectedSpell.Save(target, (Integer)levelSelectionBox.getSelectedItem());
 				target.takeDamage(d);
+				
+				addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
 			}
 			else {
 				int attackRoll = actor.spellAttackRoll(selectedSpell.casterType);
 				
 				if(attackRoll > target.getArmorClass()) {
-					Damage d = selectedSpell.Cast(actor);
+					Damage d = selectedSpell.Cast();
 					target.takeDamage(d);
 					addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
 				}

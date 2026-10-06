@@ -7,15 +7,21 @@ import dnd.core.Dice;
 import dnd.Character;
 
 public class FireBolt extends Spell{
-
-	public FireBolt(AbilityScore casterType) {
-		super(casterType);
+	
+	public FireBolt() {
 		spellName = "Fire Bolt";
+		minimumCastLevel = 0;
 	}
 
-	public Damage Cast(Character c) {
+	public FireBolt(Character caster, AbilityScore casterType) {
+		super(caster, casterType);
+		spellName = "Fire Bolt";
+		minimumCastLevel = 0;
+	}
+
+	public Damage Cast() {
 		Damage d = new Damage();
-		int dices = (int) Math.floor((c.getLevel()+1)/6)+1;
+		int dices = (int) Math.floor((caster.getLevel()+1)/6)+1;
 		d.add(Dice.roll(dices, 10), DamageType.Fire);
 		return d;
 	}

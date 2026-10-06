@@ -8,14 +8,24 @@ import dnd.core.Dice;
 
 public class Fireball extends Spell {
 
-	public Fireball(AbilityScore casterType) {
-		super(casterType);
+	public Fireball() {
 		spellName = "Fireball";
+		isSave = true;
+		minimumCastLevel = 3;
+	}
+	
+	public Fireball(Character caster, AbilityScore casterType) {
+		super(caster, casterType);
+		spellName = "Fireball";
+		isSave = true;
+		minimumCastLevel = 3;
 	}
 
-	public Damage Save(Character caster, Character target, int level) {
+	public Damage Save(Character target, int castLevel) {
+		if(castLevel < minimumCastLevel) {castLevel = minimumCastLevel;}
+		
 		Damage d = new Damage();
-		d.add(Dice.roll(8 + (level-3), 6), DamageType.Fire);
+		d.add(Dice.roll(8 + (castLevel-minimumCastLevel), 6), DamageType.Fire);
 		if(target.savingThrow(AbilityScore.DEX) > caster.getSpellSave(casterType)) {d.ammountArray.set(0, d.ammountArray.get(0)/2);}
 		return d;
 	}

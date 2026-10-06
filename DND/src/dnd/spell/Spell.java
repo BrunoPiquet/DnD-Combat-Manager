@@ -14,13 +14,20 @@ public abstract class Spell implements Serializable{
 	
 	public boolean isSave;
 	
-	public Spell(AbilityScore as) {
+	public Character caster;
+	
+	public int minimumCastLevel;
+	
+	public Spell() {}
+	
+	public Spell(Character caster, AbilityScore as) {
+		this.caster = caster;
 		this.casterType = as;
 		}
 	
-	public Damage Save(Character caster, Character target, int level) {return null;};
+	public Damage Save(Character target, int level) {return null;};
 	
-	public Damage Cast(Character caster) {return null;};
+	public Damage Cast() {return null;};
 	
 	public String toString() {
 		return spellName;
