@@ -13,9 +13,11 @@ import javax.swing.*;
 
 import dnd.core.WeaponCreator;
 import dnd.item.Armor;
+import dnd.item.ItemFactory;
 
 
 public class CharacterSheet extends JFrame {
+
 	public CharacterPanel character;
 		
 	JTextField nameField = new JTextField();
@@ -81,22 +83,48 @@ public class CharacterSheet extends JFrame {
 		
         JMenu inventoryMenu = new JMenu("Inventory");
         
+        
         JMenu addMenu = new JMenu("Add");
+        inventoryMenu.add(addMenu);
+        
+        
+        JMenu meleeMenu = new JMenu("Melee");
+        JMenu rangedMenu = new JMenu("Ranged");
+        JMenu armorMenu = new JMenu("Armors");
                 
-        addMenu.add(new JMenuItem("Swords"));
-        addMenu.add(new JMenuItem("Bows"));
-        addMenu.add(new JMenuItem("Armors"));
+        addMenu.add(meleeMenu);
+        addMenu.add(rangedMenu);
+        addMenu.add(armorMenu);
+        
+        ActionListener menuListener = new ActionListener(){
+		public void actionPerformed(ActionEvent e) {
+			character.addToInventory(ItemFactory.createItem(((JMenuItem) e.getSource()).getText()));
+			loadInventoryPanel();
+		}};
+        
+        meleeMenu.add(new JMenuItem("Longsword")).addActionListener(menuListener);
+        meleeMenu.add(new JMenuItem("Greatsword")).addActionListener(menuListener);
+        meleeMenu.add(new JMenuItem("Everburn Blade")).addActionListener(menuListener);
+        
+        rangedMenu.add(new JMenuItem("Longbow")).addActionListener(menuListener);
+        rangedMenu.add(new JMenuItem("Darkfire Shortbow")).addActionListener(menuListener);
+        
+        armorMenu.add(new JMenuItem("Hide Armor")).addActionListener(menuListener);
+        armorMenu.add(new JMenuItem("Plate Armor")).addActionListener(menuListener);
+        armorMenu.add(new JMenuItem("Splint Armor")).addActionListener(menuListener);
+        armorMenu.add(new JMenuItem("Armor Of Fire Resistance")).addActionListener(menuListener);
+        
         
         JMenuItem clearMenu = new JMenuItem("Clear");
         clearMenu.addActionListener(e -> {character.getInventory().clear();loadInventoryPanel();this.repaint();});
+        inventoryMenu.add(clearMenu);
         
         JMenuItem customWeaponMenu = new JMenuItem("Custom Weapon");
         customWeaponMenu.addActionListener(e -> {new WeaponCreator(this);});
-        
         addMenu.add(customWeaponMenu);
         
-        inventoryMenu.add(addMenu);
-        inventoryMenu.add(clearMenu);
+        
+        
 
 		menuBar.add(inventoryMenu);
 		setJMenuBar(menuBar);

@@ -20,7 +20,7 @@ import dnd.spell.Spell;
 
 public class CombatSimulator {
 	private CharacterPanel actor;
-	private CharacterPanel target;
+	private ArrayList<CharacterPanel> targetList = new ArrayList<CharacterPanel>();
 	
 	public ArrayList<String> combatLogs = new ArrayList<String>();
 	static JPanel simulatorPanel = new JPanel(new GridLayout(2,1));
@@ -35,7 +35,6 @@ public class CombatSimulator {
 	static JPanel buttonsPanel = new JPanel(new GridLayout(1,3));
 	
 	CombatSimulator(){
-
 
 		logArea.setEditable(false);
 		
@@ -171,7 +170,7 @@ public class CombatSimulator {
 	public void clear() {
 		actionsBox.removeAllItems();
 		this.actor = null;
-		this.target = null;
+		this.targetList.clear();
 		//this.simulatorPanel.removeAll();
 
 	}
@@ -182,20 +181,27 @@ public class CombatSimulator {
 		setActions(actor.getActions());
 	}
 
-	public CharacterPanel getTarget() {
-		return target;
+	public ArrayList<CharacterPanel> getTargets() {
+		return targetList;
 	}
 
-	public void setTarget(CharacterPanel target) {
-		this.target = target;
-		targetLabel.setText(target.getName());
+	public void addOrRemoveFromTargetList(CharacterPanel target) {
+		if(targetList.contains(target)) {
+			targetList.remove(target);
+			}
+		else {
+			this.targetList.add(target);
+		}
+		targetLabel.setText(targetList.toString());
 	}
 
 	public void Act() {
-		addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ target.getName() + "\n");
 		
 		if(actionsBox.getSelectedItem()== "Attack") {
+			CharacterPanel target = targetList.get(0);
 			int attackRoll = actor.weaponAttackRoll();
+			
+			addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ target.getName() + "\n");
 			
 			if(attackRoll > target.getArmorClass()) {
 				Damage d = actor.weaponAttack();
@@ -218,12 +224,21 @@ public class CombatSimulator {
 			}
 			
 			if(selectedSpell.isSave) {
-				Damage d = selectedSpell.Save(target, (Integer)levelSelectionBox.getSelectedItem());
-				target.takeDamage(d);
+				addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ targetList.toString() + "\n");
 				
-				addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
+				selectedSpell.rollDamage((Integer)levelSelectionBox.getSelectedItem());
+				for(Character target : targetList) {
+					Damage d = selectedSpell.Save(target);
+					target.takeDamage(d);
+					addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
+				}
+				
 			}
 			else {
+				CharacterPanel target = targetList.get(0);
+				
+				addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ target.getName() + "\n");
+				
 				int attackRoll = actor.spellAttackRoll(selectedSpell.casterType);
 				
 				if(attackRoll > target.getArmorClass()) {
@@ -234,14 +249,16 @@ public class CombatSimulator {
 				else {
 					addToLog(actor.getName() + " missed "+ target.getName() + " (" + attackRoll +" < "+ target.getArmorClass() +")\n");
 				}
-
+				
 			}
 			
 			
 		}
 		addToLog("\n");
 		actor.refresh();
-		target.refresh();
+		for(CharacterPanel target : targetList) {
+			target.refresh();
+		}
 	}
 
 }

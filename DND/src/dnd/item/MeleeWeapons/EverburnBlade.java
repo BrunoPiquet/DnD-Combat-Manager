@@ -1,24 +1,22 @@
-package dnd.item;
+package dnd.item.MeleeWeapons;
+
 import java.util.function.Function;
 
-import dnd.core.AbilityScore;
 import dnd.core.Damage;
-import dnd.core.DamageType;
-import dnd.core.Dice;
+import dnd.item.Weapon;
+import dnd.core.*;
 
-public class Greatsword extends Weapon {
-	
-	Greatsword(){
-		this.itemName = "Great Sword";
+public class EverburnBlade extends Weapon {
+
+	public EverburnBlade(){
+		itemName = "Everbrun Blade";
 	}
-
+	
 	public Damage calcDamage(Function<AbilityScore, Integer> mod) {
 		Damage d = new Damage();
 		d.add(Dice.roll(2, 6)+mod.apply(AbilityScore.STR), DamageType.Slashing);
+		d.add(Dice.roll(1, 4), DamageType.Fire);
 		return d;
 	}
-	
-
-	
 
 }

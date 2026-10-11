@@ -1,15 +1,20 @@
-package dnd.item;
+package dnd.item.Armors;
 
 import java.util.function.Function;
 
 import dnd.core.AbilityScore;
+import dnd.item.Armor;
 
-public class SplintArmor extends Armor{	
+public class PlateArmor extends Armor {
 	private static final long serialVersionUID = 1L;
 
+	public PlateArmor(){
+		itemName = "Plate Armor";
+	}
+	
+
 	public int getArmorClass(Function<AbilityScore, Integer> mod) {
-		// TODO Auto-generated method stub
-		return 17;
+		return 18;
 	}
 	
 }

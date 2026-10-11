@@ -13,12 +13,17 @@ public class ConeOfCold extends Spell {
 		minimumCastLevel = 5;
 	}
 	
-	public Damage Save(Character target, int castLevel) {
+	public void rollDamage(int castLevel) {
 		if(castLevel < minimumCastLevel) {castLevel = minimumCastLevel;}
-		
 		Damage d = new Damage();
 		d.add(Dice.roll(8 + (castLevel-minimumCastLevel), 8), DamageType.Cold);
+		this.rolledDamage = d;
+	}
+
+	public Damage Save(Character target) {
+		Damage d = new Damage(rolledDamage);
 		if(target.savingThrow(AbilityScore.CON) > caster.getSpellSave(casterType)) {d.ammountArray.set(0, d.ammountArray.get(0)/2);}
 		return d;
 	}
+	
 }

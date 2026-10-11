@@ -10,6 +10,12 @@ public class Damage {
 	}
 	
 	public Damage() {
+		
+	}
+	
+	public Damage(Damage d) {
+		this.ammountArray = new ArrayList<Integer>(d.ammountArray);
+		this.typeArray = new ArrayList<DamageType>(d.typeArray);
 	}
 	
 	public void add(int ammount, DamageType type) {

@@ -1,4 +1,4 @@
-package dnd.item;
+package dnd.item.MeleeWeapons;
 
 import java.util.function.Function;
 
@@ -6,10 +6,11 @@ import dnd.core.AbilityScore;
 import dnd.core.Damage;
 import dnd.core.DamageType;
 import dnd.core.Dice;
+import dnd.item.Weapon;
 
 public class Longsword extends Weapon {
 	
-	Longsword(){
+	public Longsword(){
 		itemName = "Longsword";
 	}
 	

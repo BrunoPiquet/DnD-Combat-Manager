@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 import dnd.item.*;
+import dnd.item.Armors.ArmorOfFireResistance;
+import dnd.item.Armors.PlateArmor;
+import dnd.item.RangedWeapons.DarkfireShortbow;
 import dnd.spell.*;
 import dnd.core.*;
 
@@ -77,11 +80,9 @@ public class DnD_Combat_Manager extends JFrame {
 	    		if(e.getSource() == characterList.get(i).getPanel()) {
 	    			if(e.getButton() == MouseEvent.BUTTON1) {
 	    				simulator.setActor(characterList.get(i));
-	    				//actorLabel.setText(characterList.get(i).getName());
 	    			}
 	    			else if(e.getButton() == MouseEvent.BUTTON3) {
-	    				simulator.setTarget(characterList.get(i));
-	    				//targetLabel.setText(characterList.get(i).getName());
+	    				simulator.addOrRemoveFromTargetList(characterList.get(i));
 	    			}
 	    		}
 	    	}

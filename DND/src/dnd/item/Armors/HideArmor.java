@@ -1,12 +1,13 @@
-package dnd.item;
+package dnd.item.Armors;
 
 import java.util.function.Function;
 
 import dnd.core.AbilityScore;
+import dnd.item.Armor;
 public class HideArmor extends Armor {
  static final long serialVersionUID = 1L;
 
-	HideArmor(){
+	public HideArmor(){
 		itemName = "Hide Armor";
 	}
 	

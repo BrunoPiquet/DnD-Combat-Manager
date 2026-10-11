@@ -1,4 +1,4 @@
-package dnd.item;
+package dnd.item.RangedWeapons;
 
 import java.util.function.Function;
 
@@ -6,6 +6,7 @@ import dnd.core.AbilityScore;
 import dnd.core.Damage;
 import dnd.core.DamageType;
 import dnd.core.Dice;
+import dnd.item.Weapon;
 
 public class Longbow extends Weapon {
 	public Longbow(){

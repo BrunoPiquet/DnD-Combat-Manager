@@ -1,7 +1,8 @@
-package dnd.item;
+package dnd.item.Armors;
 import dnd.Character;
 import dnd.core.AbilityScore;
 import dnd.core.DamageType;
+import dnd.item.Armor;
 
 import java.util.function.Function;
 
