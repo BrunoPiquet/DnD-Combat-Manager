@@ -81,10 +81,13 @@ public class CharacterFileSystem extends JFrame{
 			panel.add(loadButton);
 			panel.add(deleteButton);
 			
-			deleteButton.addActionListener(new ActionListener() {
-				@Override
+			ActionListener listener = new ActionListener() {
+
 				public void actionPerformed(ActionEvent ev) {
-					if(ev.getSource() == deleteButton) {
+					if(ev.getSource() == loadButton) {
+						DnD_Combat_Manager.loadCharacter(fileName);
+					}
+					else if(ev.getSource() == deleteButton) {
 						Path path = Paths.get(fileName);
 						try {
 							Files.delete(path);
@@ -93,15 +96,13 @@ public class CharacterFileSystem extends JFrame{
 							e.printStackTrace();
 						}
 					}
-				}});
+					
+				}
+			};
 			
-			loadButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent ev) {
-					if(ev.getSource() == loadButton) {
-						DnD_Combat_Manager.loadCharacter(fileName);
-					}
-				}});
+			deleteButton.addActionListener(listener);
+			
+			loadButton.addActionListener(listener);
 
 			
 			listPanel.add(panel);

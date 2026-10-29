@@ -6,7 +6,7 @@ import dnd.core.DamageType;
 import dnd.core.Dice;
 import dnd.Character;
 
-public class FireBolt extends Spell{
+public class FireBolt extends AttackSpell{
 	
 	public FireBolt() {
 		spellName = "Fire Bolt";

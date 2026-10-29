@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import dnd.core.*;
-import dnd.spell.Spell;
+import dnd.spell.*;
 
 public class CombatSimulator {
 	private CharacterPanel actor;
@@ -223,18 +223,23 @@ public class CombatSimulator {
 				}
 			}
 			
-			if(selectedSpell.isSave) {
+			if(selectedSpell instanceof SaveSpell) {
+				
 				addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ targetList.toString() + "\n");
 				
 				selectedSpell.rollDamage((Integer)levelSelectionBox.getSelectedItem());
 				for(Character target : targetList) {
-					Damage d = selectedSpell.Save(target);
+					Damage d = ((SaveSpell) selectedSpell).Save(target);
 					target.takeDamage(d);
-					addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
+					
+					String saveString = " saves and";
+					if(!((SaveSpell) selectedSpell).hasSaved) {saveString = " doesn't save and";}
+					
+					addToLog(target.getName() + saveString+ " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
 				}
 				
 			}
-			else {
+			else if (selectedSpell instanceof AttackSpell) {
 				CharacterPanel target = targetList.get(0);
 				
 				addToLog(actor.getName() + " used "+ actionsBox.getSelectedItem()+" on "+ target.getName() + "\n");
@@ -242,9 +247,10 @@ public class CombatSimulator {
 				int attackRoll = actor.spellAttackRoll(selectedSpell.casterType);
 				
 				if(attackRoll > target.getArmorClass()) {
-					Damage d = selectedSpell.Cast();
+					Damage d = ((AttackSpell) selectedSpell).Cast();
 					target.takeDamage(d);
-					addToLog(target.getName() + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
+										
+					addToLog(target.getName()  + " takes " + d.toString() +" damage from "+ actor.getName()+"'s "+ selectedSpell.spellName+"" +"\n");
 				}
 				else {
 					addToLog(actor.getName() + " missed "+ target.getName() + " (" + attackRoll +" < "+ target.getArmorClass() +")\n");

@@ -181,8 +181,6 @@ public class DnD_Combat_Manager extends JFrame {
 		 kulve.addToSpellList(new FireBolt(), AbilityScore.CHA);
 		 kulve.addToSpellList(new ConeOfCold(), AbilityScore.CHA);
 		 
-	 
-		 
 	}
 
 }

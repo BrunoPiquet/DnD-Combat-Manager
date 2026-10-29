@@ -1,6 +1,9 @@
 package dnd.core;
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Damage {
+public class Damage implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	public ArrayList<Integer> ammountArray = new ArrayList<Integer>();
 	public ArrayList<DamageType> typeArray = new ArrayList<DamageType>();
 

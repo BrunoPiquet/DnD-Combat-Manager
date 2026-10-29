@@ -6,10 +6,9 @@ import dnd.core.Damage;
 import dnd.core.DamageType;
 import dnd.core.Dice;
 
-public class ConeOfCold extends Spell {
+public class ConeOfCold extends SaveSpell {
 	public ConeOfCold() {
 		spellName = "Cone Of Cold";
-		isSave = true;
 		minimumCastLevel = 5;
 	}
 	
@@ -22,7 +21,10 @@ public class ConeOfCold extends Spell {
 
 	public Damage Save(Character target) {
 		Damage d = new Damage(rolledDamage);
-		if(target.savingThrow(AbilityScore.CON) > caster.getSpellSave(casterType)) {d.ammountArray.set(0, d.ammountArray.get(0)/2);}
+		if(target.savingThrow(AbilityScore.CON) > caster.getSpellSave(casterType)) {
+			d.ammountArray.set(0, d.ammountArray.get(0)/2);
+			hasSaved = true;
+		}
 		return d;
 	}
 	

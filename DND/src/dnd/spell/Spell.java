@@ -12,8 +12,6 @@ public abstract class Spell implements Serializable{
 	
 	public AbilityScore casterType;
 	
-	public boolean isSave;
-	
 	public Character caster;
 	
 	public int minimumCastLevel;
@@ -27,14 +25,9 @@ public abstract class Spell implements Serializable{
 		this.casterType = as;
 		}
 	
-	public Damage Save(Character target) {return null;};
-	
-	public Damage Cast() {return null;};
+	public void rollDamage(int level) {}
 	
 	public String toString() {
 		return spellName;
 	}
-	
-	public void rollDamage(int level) {}
-	
 }

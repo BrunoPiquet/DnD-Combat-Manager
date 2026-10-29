@@ -22,7 +22,7 @@ public class WeaponCreator extends JFrame{
 	Weapon weapon = new GenericWeapon();
 	
 	JTextField nameField = new JTextField(); 
-	JTextField enhancementField = new JTextField(); 
+	JTextField enhancementField = new JTextField("0"); 
 	JTextField nDiceField = new JTextField();
 	JTextField nFacesField = new JTextField();
 	JButton addButton = new JButton("Add");
